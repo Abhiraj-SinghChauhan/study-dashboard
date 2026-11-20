@@ -34,7 +34,7 @@ JS builds against this example today, using a fixture file.
 js-error-banner, timer-display, timer-start, timer-pause, timer-reset,
 study-form, expense-form, sessions-section, expenses-section,
 study-chart, expense-chart
-Server messages use class flash-*. JS messages use js-message-*. Never mix them.
+Server messages use class `flash-*`. JS messages use `js-message-*`. Never mix them.
 
 ## Setup facts
 Python 3.10+. DEFAULT_USER_ID = 1. The database setup must create user 1
