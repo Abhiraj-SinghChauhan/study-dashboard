@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+{% block title %}Dashboard - Student Study &amp; Expense Dashboard{% endblock %}
+{% block content %}
+<!-- JavaScript messages (js-message-*) -->
+<div id="js-error-banner" class="js-message js-message-error" role="status" aria-live="polite" hidden></div>
+
+<!-- Summary cards: values are filled by JS from /api/chart-data (last 30 days) -->
+<section class="stats-row">
+  <div class="card stat-card">
+    <span class="stat-label">Studied (30 days)</span>
+    <strong id="stat-study" class="stat-value">-</strong>
+  </div>
+  <div class="card stat-card">
+    <span class="stat-label">Spent (30 days)</span>
+    <strong id="stat-spent" class="stat-value">-</strong>
+  </div>
+  <div class="card stat-card">
+    <span class="stat-label">Daily study average</span>
+    <strong id="stat-average" class="stat-value">-</strong>
+  </div>
+</section>
+
+<div class="top-row">
+  <!-- Timer -->
+  <section class="card timer-card">
+    <h2>Study Timer</h2>
+    <div id="timer-display">00:00:00</div>
+    <div class="timer-buttons">
+      <button id="timer-start" type="button">Start</button>
+      <button id="timer-pause" type="button" class="btn-secondary">Pause</button>
+      <button id="timer-reset" type="button" class="btn-secondary">Reset</button>
+    </div>
+  </section>
+
+  <!-- Forms -->
+  <div class="forms-row">
+    <section class="card">
+      <h2>Log Study Session</h2>
+      <form id="study-form" action="{{ url_for('main.log_study') }}" method="POST" class="form-grid">
+        <div>
+          <label for="subject_name">Subject</label>
+          <input type="text" id="subject_name" name="subject_name" required>
+        </div>
+        <div>
+          <label for="session_date">Date</label>
+          <input type="date" id="session_date" name="session_date" required>
+        </div>
+        <div>
+          <label for="duration_minutes">Duration (minutes)</label>
+          <input type="number" id="duration_minutes" name="duration_minutes" min="1" required>
+        </div>
+        <div>
+          <label for="status">Status</label>
+          <select id="status" name="status" required>
+            <option value="planned">Planned</option>
+            <option value="in_progress">In progress</option>
+            <option value="completed" selected>Completed</option>
+            <option value="skipped">Skipped</option>
+          </select>
+        </div>
+        <button type="submit">Log Study</button>
+      </form>
+    </section>
+
+    <section class="card">
+      <h2>Add Expense</h2>
+      <form id="expense-form" action="{{ url_for('main.add_expense') }}" method="POST" class="form-grid">
+        <div>
+          <label for="category_name">Category</label>
+          <input type="text" id="category_name" name="category_name" required>
+        </div>
+        <div>
+          <label for="amount">Amount</label>
+          <input type="number" id="amount" name="amount" min="0" step="0.01" required>
+        </div>
+        <div>
+          <label for="expense_date">Date</label>
+          <input type="date" id="expense_date" name="expense_date" required>
+        </div>
+        <div>
+          <label for="description">Description</label>
+          <input type="text" id="description" name="description">
+        </div>
+        <button type="submit">Add Expense</button>
+      </form>
+    </section>
+  </div>
+</div>
+
+<!-- Charts -->
+<div class="charts-row">
+  <section class="card">
+    <h2>Study Minutes per Day</h2>
+    <div class="chart-box">
+      <canvas id="study-chart"></canvas>
+    </div>
+  </section>
+  <section class="card">
+    <h2>Expenses</h2>
+    <div class="chart-box">
+      <canvas id="expense-chart"></canvas>
+    </div>
+  </section>
+</div>
+
+<!-- Lists: newest first. Rows 3+ get class="extra-row" -->
+<div class="tables-row">
+  <section id="sessions-section" class="card">
+    <h2>Recent Study Sessions</h2>
+    <input type="checkbox" id="sessions-toggle" class="show-all-toggle">
+    {% if sessions %}
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Subject</th><th>Date</th><th>Minutes</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+          {% for s in sessions %}
+          <tr{% if loop.index > 2 %} class="extra-row"{% endif %}><td>{{ s.subject_name }}</td><td>{{ s.session_date }}</td><td>{{ s.duration_minutes }}</td><td><span class="status-badge status-{{ s.status }}">{{ s.status }}</span></td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <p class="empty-state">No study sessions logged yet.</p>
+    {% endif %}
+    <label for="sessions-toggle" class="show-all-label">
+      <span class="when-closed">Show all</span><span class="when-open">Show less</span>
+    </label>
+  </section>
+
+  <section id="expenses-section" class="card">
+    <h2>Recent Expenses</h2>
+    <input type="checkbox" id="expenses-toggle" class="show-all-toggle">
+    {% if expenses %}
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Category</th><th>Amount</th><th>Date</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+          {% for e in expenses %}
+          <tr{% if loop.index > 2 %} class="extra-row"{% endif %}><td>{{ e.category_name }}</td><td>{{ "%.2f"|format(e.amount) }}</td><td>{{ e.expense_date }}</td><td>{{ e.description or "" }}</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <p class="empty-state">No expenses logged yet.</p>
+    {% endif %}
+    <label for="expenses-toggle" class="show-all-label">
+      <span class="when-closed">Show all</span><span class="when-open">Show less</span>
+    </label>
+  </section>
+</div>
+{% endblock %}
