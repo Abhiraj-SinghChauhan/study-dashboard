@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Student Study &amp; Expense Dashboard</title>
+  <link rel="stylesheet" href="static/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <h1>Student Study &amp; Expense Dashboard</h1>
+    <p>Track your study time and spending in one place</p>
+  </header>
+
+  <main class="container">
+
+    <!-- Server messages (flash-*) -->
+    <div class="flash flash-success">Study session logged successfully.</div>
+
+    <!-- JavaScript messages (js-message-*) -->
+    <div id="js-error-banner" class="js-message js-message-error" hidden></div>
+
+    <div class="top-row">
+      <!-- Timer -->
+      <section class="card timer-card">
+        <h2>Study Timer</h2>
+        <div id="timer-display">00:00:00</div>
+        <div class="timer-buttons">
+          <button id="timer-start" type="button">Start</button>
+          <button id="timer-pause" type="button" class="btn-secondary">Pause</button>
+          <button id="timer-reset" type="button" class="btn-secondary">Reset</button>
+        </div>
+      </section>
+
+      <!-- Forms -->
+      <div class="forms-row">
+        <section class="card">
+          <h2>Log Study Session</h2>
+          <form id="study-form" action="/log-study" method="POST" class="form-grid">
+            <div>
+              <label for="subject_name">Subject</label>
+              <input type="text" id="subject_name" name="subject_name" required>
+            </div>
+            <div>
+              <label for="session_date">Date</label>
+              <input type="date" id="session_date" name="session_date" required>
+            </div>
+            <div>
+              <label for="duration_minutes">Duration (minutes)</label>
+              <input type="number" id="duration_minutes" name="duration_minutes" min="1" required>
+            </div>
+            <div>
+              <label for="status">Status</label>
+              <select id="status" name="status" required>
+                <option value="planned">Planned</option>
+                <option value="in_progress">In progress</option>
+                <option value="completed" selected>Completed</option>
+                <option value="skipped">Skipped</option>
+              </select>
+            </div>
+            <button type="submit">Log Study</button>
+          </form>
+        </section>
+
+        <section class="card">
+          <h2>Add Expense</h2>
+          <form id="expense-form" action="/add-expense" method="POST" class="form-grid">
+            <div>
+              <label for="category_name">Category</label>
+              <input type="text" id="category_name" name="category_name" required>
+            </div>
+            <div>
+              <label for="amount">Amount</label>
+              <input type="number" id="amount" name="amount" min="0" step="0.01" required>
+            </div>
+            <div>
+              <label for="expense_date">Date</label>
+              <input type="date" id="expense_date" name="expense_date" required>
+            </div>
+            <div>
+              <label for="description">Description</label>
+              <input type="text" id="description" name="description">
+            </div>
+            <button type="submit">Add Expense</button>
+          </form>
+        </section>
+      </div>
+    </div>
+
+    <!-- Charts -->
+    <div class="charts-row">
+      <section class="card">
+        <h2>Study Minutes per Day</h2>
+        <div class="chart-box">
+          <canvas id="study-chart"></canvas>
+        </div>
+      </section>
+      <section class="card">
+        <h2>Expenses</h2>
+        <div class="chart-box">
+          <canvas id="expense-chart"></canvas>
+        </div>
+      </section>
+    </div>
+    <!-- Lists: newest first. Rows 3+ get class="extra-row" -->
+    <div class="tables-row">
+      <section id="sessions-section" class="card">
+        <h2>Recent Study Sessions</h2>
+        <input type="checkbox" id="sessions-toggle" class="show-all-toggle">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Subject</th><th>Date</th><th>Minutes</th><th>Status</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Maths</td><td>2026-11-20</td><td>45</td><td><span class="status-badge">planned</span></td></tr>
+              <tr><td>Python</td><td>2026-11-19</td><td>90</td><td><span class="status-badge">completed</span></td></tr>
+              <tr class="extra-row"><td>Physics</td><td>2026-11-18</td><td>60</td><td><span class="status-badge">completed</span></td></tr>
+              <tr class="extra-row"><td>Chemistry</td><td>2026-11-15</td><td>30</td><td><span class="status-badge">skipped</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <label for="sessions-toggle" class="show-all-label">
+          <span class="when-closed">Show all</span><span class="when-open">Show less</span>
+        </label>
+      </section>
+
+      <section id="expenses-section" class="card">
+        <h2>Recent Expenses</h2>
+        <input type="checkbox" id="expenses-toggle" class="show-all-toggle">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Category</th><th>Amount</th><th>Date</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Food</td><td>150.00</td><td>2026-11-19</td><td>Lunch</td></tr>
+              <tr><td>Transport</td><td>40.00</td><td>2026-11-19</td><td>Bus pass</td></tr>
+              <tr class="extra-row"><td>Books</td><td>320.00</td><td>2026-11-12</td><td>Maths textbook</td></tr>
+              <tr class="extra-row"><td>Snacks</td><td>60.00</td><td>2026-11-10</td><td>Canteen</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <label for="expenses-toggle" class="show-all-label">
+          <span class="when-closed">Show all</span><span class="when-open">Show less</span>
+        </label>
+      </section>
+    </div>
+
+  </main>
+</body>
+</html>
