@@ -18,7 +18,23 @@
     <div class="flash flash-success">Study session logged successfully.</div>
 
     <!-- JavaScript messages (js-message-*) -->
-    <div id="js-error-banner" class="js-message js-message-error" hidden></div>
+    <div id="js-error-banner" class="js-message js-message-error" role="status" aria-live="polite" hidden></div>
+
+    <!-- Summary cards: values are filled by JS from /api/chart-data (last 30 days) -->
+    <section class="stats-row">
+      <div class="card stat-card">
+        <span class="stat-label">Studied (30 days)</span>
+        <strong id="stat-study" class="stat-value">-</strong>
+      </div>
+      <div class="card stat-card">
+        <span class="stat-label">Spent (30 days)</span>
+        <strong id="stat-spent" class="stat-value">-</strong>
+      </div>
+      <div class="card stat-card">
+        <span class="stat-label">Daily study average</span>
+        <strong id="stat-average" class="stat-value">-</strong>
+      </div>
+    </section>
 
     <div class="top-row">
       <!-- Timer -->
@@ -113,10 +129,10 @@
               <tr><th>Subject</th><th>Date</th><th>Minutes</th><th>Status</th></tr>
             </thead>
             <tbody>
-              <tr><td>Maths</td><td>2026-11-20</td><td>45</td><td><span class="status-badge">planned</span></td></tr>
-              <tr><td>Python</td><td>2026-11-19</td><td>90</td><td><span class="status-badge">completed</span></td></tr>
-              <tr class="extra-row"><td>Physics</td><td>2026-11-18</td><td>60</td><td><span class="status-badge">completed</span></td></tr>
-              <tr class="extra-row"><td>Chemistry</td><td>2026-11-15</td><td>30</td><td><span class="status-badge">skipped</span></td></tr>
+              <tr><td>Maths</td><td>2026-11-20</td><td>45</td><td><span class="status-badge status-planned">planned</span></td></tr>
+              <tr><td>Python</td><td>2026-11-19</td><td>90</td><td><span class="status-badge status-completed">completed</span></td></tr>
+              <tr class="extra-row"><td>Physics</td><td>2026-11-18</td><td>60</td><td><span class="status-badge status-completed">completed</span></td></tr>
+              <tr class="extra-row"><td>Chemistry</td><td>2026-11-15</td><td>30</td><td><span class="status-badge status-skipped">skipped</span></td></tr>
             </tbody>
           </table>
         </div>
