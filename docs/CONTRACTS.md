@@ -33,9 +33,28 @@ JS builds against this example today, using a fixture file.
 ## Element IDs (HTML to JS), frozen
 js-error-banner, timer-display, timer-start, timer-pause, timer-reset,
 study-form, expense-form, sessions-section, expenses-section,
-study-chart, expense-chart
+study-chart, expense-chart,
+stat-study, stat-spent, stat-average
 Server messages use class `flash-*`. JS messages use `js-message-*`. Never mix them.
 
 ## Setup facts
 Python 3.10+. DEFAULT_USER_ID = 1. The database setup must create user 1
 (demo_student) or the first form submit fails. Chart.js loads from a CDN in base.html.
+
+## UI polish additions (additive, nothing above changed)
+- New element IDs (HTML to JS): stat-study, stat-spent, stat-average.
+  JS fills them from /api/chart-data (30 days): total study time, total spent, daily_study_average_minutes.
+- Tables: rows come newest first. Every row after the 2nd gets class="extra-row" (hidden until "Show all").
+  The "Show all" checkbox, label and wrapper markup stay exactly as in dashboard_mockup.html.
+- Status badge: <span class="status-badge status-{status}"> where {status} is planned, in_progress, completed or skipped.
+- Empty table: <p class="empty-state">...</p> instead of the table.
+- Server messages render as <ul class="flashes"><li class="flash flash-{category}">. JS banner: id js-error-banner (JS sets class js-message-banner + js-message-*).
+
+## UI polish additions (additive, nothing above changed)
+- New element IDs (HTML to JS): stat-study, stat-spent, stat-average.
+  JS fills them from /api/chart-data (30 days): total study time, total spent, daily_study_average_minutes.
+- Tables: rows come newest first. Every row after the 2nd gets class="extra-row" (hidden until "Show all").
+  The "Show all" checkbox, label and wrapper markup stay exactly as in dashboard_mockup.html.
+- Status badge: <span class="status-badge status-{status}"> where {status} is planned, in_progress, completed or skipped.
+- Empty table: <p class="empty-state">...</p> instead of the table.
+- Server messages render as <ul class="flashes"><li class="flash flash-{category}">. JS banner: id js-error-banner (JS sets class js-message-banner + js-message-*).
